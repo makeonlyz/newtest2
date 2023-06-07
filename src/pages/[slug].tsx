@@ -36,7 +36,6 @@ return (
       {/* Add the Open Graph meta tags */}
       {pageData && (
         <>
-          <meta property="og:url" content={pageData.url} />
           <meta property="og:type" content="article" />
           <meta property="og:title" content={pageData.title} />
           <meta property="og:description" content={pageData.title} />
