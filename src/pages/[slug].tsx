@@ -72,24 +72,17 @@ export const getServerSideProps: GetServerSideProps<PageProps, ParsedUrlQuery> =
   const redirect = query?.utm_source === 'fb'
   const isMi = userAgent ? userAgent.toUpperCase().includes('MI') : false
 
-  if ((isMi && postId) || redirect) {
-    const blogUrl = process.env.NEXT_PUBLIC_BLOG_URL
-    const redirectUrl = url.format({
-      protocol: 'https',
-      hostname: blogUrl,
-      pathname: '/',
-      query: {
-        p: postId
-      }
-    })
-
-    return {
-      redirect: {
-        destination: redirectUrl,
-        permanent: false
-      }
+  const isMi = req ? req.headers['user-agent'].toUpperCase().indexOf("MI") >= 0 : false;
+    if(isMi&&pid){
+        return {
+            redirect: {
+                permanent: false,
+                destination: https://${config.BLOG_URL}?p=${pid}
+            }
+        }
     }
-  }
+  
+  
 
   return {
     props: {
