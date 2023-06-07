@@ -87,12 +87,6 @@ export const getServerSideProps: GetServerSideProps<PageProps, ParsedUrlQuery> =
 
     return {
       redirect: {
-        destination: 'https://siamsay.com/?p=7427',
-        permanent: false
-      }
-    }
-    return {
-      redirect: {
         destination: redirectUrl,
         permanent: false
       }
