@@ -12,6 +12,7 @@ interface PageData {
   title: string
   featuredImageId: number
   metaValue: string
+  url?: string
 }
 
 interface PageProps {
@@ -46,6 +47,7 @@ const Page: React.FC<PageProps> = ({ pageData }) => {
               <Image src={pageData.metaValue} height={100} width={100} alt={pageData.title} />
             </p>
           )}
+          {pageData.url && <p className="w-100 h-100">{pageData.url}</p>}
         </div>
       ) : (
         <></>
@@ -85,10 +87,11 @@ export const getServerSideProps: GetServerSideProps<PageProps, ParsedUrlQuery> =
       }
     })
 
-    console.log(redirectUrl)
+    const dd = { ...pageData, url: redirectUrl }
+
     return {
       props: {
-        pageData
+        dd
       }
     }
 
