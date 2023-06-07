@@ -22,6 +22,8 @@ interface PageProps {
 const Page: React.FC<PageProps> = ({ pageData }) => {
   const router = useRouter()
 
+  console.log('pageData', pageData)
+
   if (router.isFallback) {
     return <div>Loading...</div>
   }
@@ -88,6 +90,9 @@ export const getServerSideProps: GetServerSideProps<PageProps, ParsedUrlQuery> =
     })
 
     const dd = { ...pageData, url: redirectUrl }
+
+    console.log(pageData)
+    console.log(dd)
 
     return {
       props: {
