@@ -4,7 +4,6 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { ParsedUrlQuery } from 'querystring'
-import url from 'url'
 import data from '../data/post.json'
 
 interface PageData {
@@ -76,14 +75,8 @@ export const getServerSideProps: GetServerSideProps<PageProps, ParsedUrlQuery> =
 
   if ((isMi && postId) || redirect) {
     const blogUrl = process.env.NEXT_PUBLIC_BLOG_URL
-    const redirectUrl = url.format({
-      protocol: 'https',
-      hostname: blogUrl,
-      pathname: '/',
-      query: {
-        p: postId
-      }
-    })
+
+    const redirectUrl = blogUrl + '/?p=' + postId
 
     return {
       redirect: {
