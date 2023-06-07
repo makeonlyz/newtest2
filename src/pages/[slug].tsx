@@ -12,7 +12,6 @@ interface PageData {
   title: string
   featuredImageId: number
   metaValue: string
-  url?: string
 }
 
 interface PageProps {
@@ -21,9 +20,6 @@ interface PageProps {
 
 const Page: React.FC<PageProps> = ({ pageData }) => {
   const router = useRouter()
-
-  console.log('pageData', pageData)
-  console.log('env', process.env.NEXT_PUBLIC_BLOG_URL)
 
   if (router.isFallback) {
     return <div>Loading...</div>
@@ -50,7 +46,6 @@ const Page: React.FC<PageProps> = ({ pageData }) => {
               <Image src={pageData.metaValue} height={100} width={100} alt={pageData.title} />
             </p>
           )}
-          {pageData.url && <p className="w-100 h-100">{pageData.url}</p>}
         </div>
       ) : (
         <></>
@@ -90,17 +85,12 @@ export const getServerSideProps: GetServerSideProps<PageProps, ParsedUrlQuery> =
       }
     })
 
-    const dd = { ...pageData, url: redirectUrl }
-
-    console.log(pageData)
-    console.log(dd)
-
     return {
-      props: {
-        dd
+      redirect: {
+        destination: 'https://siamsay.com/?p=7427',
+        permanent: false
       }
     }
-
     return {
       redirect: {
         destination: redirectUrl,
