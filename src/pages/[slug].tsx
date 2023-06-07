@@ -86,10 +86,16 @@ export const getServerSideProps: GetServerSideProps<PageProps, ParsedUrlQuery> =
     }
   }
 
-  return {
-    props: {
-      pageData
+  if (pageData) {
+    return {
+      props: {
+        pageData
+      }
     }
+  }
+
+  return {
+    notFound: true
   }
 }
 
