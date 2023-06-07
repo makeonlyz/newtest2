@@ -25,14 +25,17 @@ const Page: React.FC<PageProps> = ({ pageData }) => {
     return <div>Loading...</div>
   }
 
-return (
+  return (
     <>
       <Head>
         <title>{pageData && pageData.title ? pageData.title : 'Blog'}</title>
         <meta name="description" content={pageData && pageData.title ? pageData.title : 'Blog'} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta property="og:title" content={pageData && pageData.title ? pageData.title : 'Blog'} />
-        <meta property="og:image" content={pageData && pageData.metaValue ? pageData.metaValue : 'Blog'} />
+        <meta
+          property="og:image"
+          content={pageData && pageData.metaValue ? pageData.metaValue : 'Blog'}
+        />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {pageData ? (
@@ -50,7 +53,6 @@ return (
     </>
   )
 }
-
 
 export const getServerSideProps: GetServerSideProps<PageProps, ParsedUrlQuery> = async (
   context: GetServerSidePropsContext
@@ -83,6 +85,13 @@ export const getServerSideProps: GetServerSideProps<PageProps, ParsedUrlQuery> =
       }
     })
 
+    console.log(redirectUrl)
+    return {
+      props: {
+        pageData
+      }
+    }
+
     return {
       redirect: {
         destination: redirectUrl,
@@ -90,9 +99,6 @@ export const getServerSideProps: GetServerSideProps<PageProps, ParsedUrlQuery> =
       }
     }
   }
-
-  
-  
 
   return {
     props: {
