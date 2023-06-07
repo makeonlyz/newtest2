@@ -26,38 +26,28 @@ const Page: React.FC<PageProps> = ({ pageData }) => {
   }
 
 return (
-  <>
-    <Head>
-      <title>{pageData && pageData.title ? pageData.title : 'Blog'}</title>
-      <meta name="description" content={pageData && pageData.title ? pageData.title : 'Blog'} />
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <link rel="icon" href="/favicon.ico" />
-
-      {/* Add the Open Graph meta tags */}
-      {pageData && (
-        <>
-          <meta property="og:type" content="article" />
-          <meta property="og:title" content={pageData.title} />
-          <meta property="og:description" content={pageData.title} />
-          <meta property="og:image" content={pageData.metaValue} />
-        </>
+    <>
+      <Head>
+        <title>{pageData && pageData.title ? pageData.title : 'Blog'}</title>
+        <meta name="description" content={pageData && pageData.title ? pageData.title : 'Blog'} />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      {pageData ? (
+        <div>
+          <h1>{pageData.title}</h1>
+          {pageData.metaValue && (
+            <p className="w-100 h-100">
+              <Image src={pageData.metaValue} height={100} width={100} alt={pageData.title} />
+            </p>
+          )}
+        </div>
+      ) : (
+        <></>
       )}
-    </Head>
-
-    {pageData ? (
-      <div>
-        <h1>{pageData.title}</h1>
-        {pageData.metaValue && (
-          <p className="w-100 h-100">
-            <Image src={pageData.metaValue} height={100} width={100} alt={pageData.title} />
-          </p>
-        )}
-      </div>
-    ) : (
-      <></>
-    )}
-  </>
-);
+    </>
+  )
+}
 
 
 export const getServerSideProps: GetServerSideProps<PageProps, ParsedUrlQuery> = async (
