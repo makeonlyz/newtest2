@@ -60,7 +60,8 @@ export const getServerSideProps: GetServerSideProps<PageProps, ParsedUrlQuery> =
   const headers: IncomingHttpHeaders = req.headers
   const userAgent = headers['user-agent']
 
-  const postId = Number(params?.slug)
+  //const postId = Number(params?.slug)
+  const postId = params.postId.split("-")[1];
 
   if (isNaN(postId)) {
     return {
