@@ -23,6 +23,7 @@ const Page: React.FC<PageProps> = ({ pageData }) => {
   const router = useRouter()
 
   console.log('pageData', pageData)
+  console.log('env', process.env.NEXT_PUBLIC_BLOG_URL)
 
   if (router.isFallback) {
     return <div>Loading...</div>
