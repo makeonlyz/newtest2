@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { ParsedUrlQuery } from 'querystring'
 import url from 'url'
-import data from '../data/post.json'
+import data from '../../data/post.json'
 
 interface PageData {
   postid: number
