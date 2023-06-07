@@ -31,8 +31,8 @@ return (
         <title>{pageData && pageData.title ? pageData.title : 'Blog'}</title>
         <meta name="description" content={pageData && pageData.title ? pageData.title : 'Blog'} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta property="og:title" content={pageData.title} />
-        <meta property="og:image" content={pageData.metaValue} />
+        <meta property="og:title" content={pageData && pageData.title ? pageData.title : 'Blog'} />
+        <meta property="og:image" content={pageData && pageData.metaValue ? pageData.metaValue} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {pageData ? (
