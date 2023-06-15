@@ -2,8 +2,8 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['siamsay.com'],
-  },
+    domains: process.env.IMAGE_DOMAINS.split(',')
+  }
 }
 
 module.exports = nextConfig

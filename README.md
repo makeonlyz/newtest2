@@ -5,6 +5,7 @@ npm i
 ```
 
 ## Env
+
 ```bash
 cp .env.example .env.local
 ```
@@ -13,4 +14,11 @@ cp .env.example .env.local
 
 ```bash
 npm run dev
+```
+
+## Slug page is
+
+```bash
+/abc-{wordpress-post-id}
+/abc-7427
 ```

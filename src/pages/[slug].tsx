@@ -4,13 +4,13 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { ParsedUrlQuery } from 'querystring'
-import data from '../data/post.json'
+// import data from `../data/${process.env.NEXT_PUBLIC_JSON_FILE}`
+const data = require(`../data/${process.env.NEXT_PUBLIC_JSON_FILE}`)
 
 interface PageData {
-  postid: number
-  title: string
-  featuredImageId: number
-  metaValue: string
+  p: number
+  t: string
+  i: string
 }
 
 interface PageProps {
@@ -27,22 +27,19 @@ const Page: React.FC<PageProps> = ({ pageData }) => {
   return (
     <>
       <Head>
-        <title>{pageData && pageData.title ? pageData.title : 'Blog'}</title>
-        <meta name="description" content={pageData && pageData.title ? pageData.title : 'Blog'} />
+        <title>{pageData && pageData.t ? pageData.t : 'Blog'}</title>
+        <meta name="description" content={pageData && pageData.t ? pageData.t : 'Blog'} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta property="og:title" content={pageData && pageData.title ? pageData.title : 'Blog'} />
-        <meta
-          property="og:image"
-          content={pageData && pageData.metaValue ? pageData.metaValue : 'Blog'}
-        />
+        <meta property="og:title" content={pageData && pageData.t ? pageData.t : 'Blog'} />
+        <meta property="og:image" content={pageData && pageData.i ? pageData.i : 'Blog'} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {pageData ? (
         <div>
-          <h1>{pageData.title}</h1>
-          {pageData.metaValue && (
+          <h1>{pageData.t}</h1>
+          {pageData.i && (
             <p className="w-100 h-100">
-              <Image src={pageData.metaValue} height={100} width={100} alt={pageData.title} />
+              <Image src={pageData.i} height={100} width={100} alt={pageData.t} />
             </p>
           )}
         </div>
@@ -68,7 +65,7 @@ export const getServerSideProps: GetServerSideProps<PageProps, ParsedUrlQuery> =
     }
   }
 
-  const pageData = data.find((page: PageData) => page.postid === postId)
+  const pageData = data.find((page: PageData) => page.p === postId)
 
   const redirect = query?.utm_source === 'fb'
   const isMi = userAgent ? userAgent.toUpperCase().includes('MI') : false
