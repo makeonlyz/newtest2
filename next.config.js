@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: process.env.IMAGE_DOMAINS.split(',')
+    domains: process.env.NEXT_PUBLIC_IMAGE_DOMAINS.split(',')
   }
 }
 
