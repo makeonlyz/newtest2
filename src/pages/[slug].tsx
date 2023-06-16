@@ -5,7 +5,9 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { ParsedUrlQuery } from 'querystring'
 // import data from `../data/${process.env.NEXT_PUBLIC_JSON_FILE}`
-const data = require(`../data/${process.env.NEXT_PUBLIC_JSON_FILE}`)
+// const data = require(`../data/${process.env.NEXT_PUBLIC_JSON_FILE}`)
+import fsPromises from 'fs/promises'
+import path from 'path'
 
 interface PageData {
   p: number
@@ -66,7 +68,12 @@ export const getServerSideProps: GetServerSideProps<PageProps, ParsedUrlQuery> =
     }
   }
 
-  const pageData = data.find((page: PageData) => page.p === postId)
+  const filePath = path.join(process.cwd(), `/src/data/${process.env.NEXT_PUBLIC_JSON_FILE}`)
+  const jsonData = await fsPromises.readFile(filePath)
+  const jsonString = jsonData.toString()
+  const objectData = JSON.parse(jsonString)
+
+  const pageData = objectData.find((page: PageData) => page.p === postId)
 
   const redirect = query?.utm_source === 'fb'
   const isMi = userAgent ? userAgent.toUpperCase().includes('MI') : false
