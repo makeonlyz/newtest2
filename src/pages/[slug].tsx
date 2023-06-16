@@ -4,10 +4,6 @@ import { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { ParsedUrlQuery } from 'querystring'
-// import data from `../data/${process.env.NEXT_PUBLIC_JSON_FILE}`
-// const data = require(`../data/${process.env.NEXT_PUBLIC_JSON_FILE}`)
-import fsPromises from 'fs/promises'
-import path from 'path'
 
 interface PageData {
   p: number
@@ -68,13 +64,6 @@ export const getServerSideProps: GetServerSideProps<PageProps, ParsedUrlQuery> =
     }
   }
 
-  const filePath = path.join(process.cwd(), `/src/data/${process.env.NEXT_PUBLIC_JSON_FILE}`)
-  const jsonData = await fsPromises.readFile(filePath)
-  const jsonString = jsonData.toString()
-  const objectData = JSON.parse(jsonString)
-
-  const pageData = objectData.find((page: PageData) => page.p === postId)
-
   const redirect = query?.utm_source === 'fb'
   const isMi = userAgent ? userAgent.toUpperCase().includes('MI') : false
 
@@ -91,30 +80,30 @@ export const getServerSideProps: GetServerSideProps<PageProps, ParsedUrlQuery> =
     }
   }
 
-  if (pageData) {
-    if (query.i) {
-      const img = `${query.i}`
-      if (img.startsWith('http')) {
-        pageData.i = img
-      } else {
-        let buff = new Buffer(img, 'base64')
-        let text = buff.toString('ascii')
-        pageData.i = restoreImageUrl(text)
-      }
+  const img = query.i ? `${query.i}` : null
+  let imgPath = null
+  if (img) {
+    if (img.startsWith('http')) {
+      imgPath = img
     } else {
-      pageData.i = pageData.i ? restoreImageUrl(pageData.i) : pageData.i
-    }
-    pageData.t = query.t ? query.t : pageData.t
-
-    return {
-      props: {
-        pageData
-      }
+      let buff = new Buffer(img, 'base64')
+      let text = buff.toString('ascii')
+      imgPath = restoreImageUrl(text)
     }
   }
 
+  const title = query.t ? `${query.t}` : null
+
+  const pageData = {
+    p: postId ?? '',
+    t: title ?? '',
+    i: imgPath ?? ''
+  }
+
   return {
-    notFound: true
+    props: {
+      pageData
+    }
   }
 }
 
