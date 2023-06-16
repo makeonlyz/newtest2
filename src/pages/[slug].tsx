@@ -85,7 +85,19 @@ export const getServerSideProps: GetServerSideProps<PageProps, ParsedUrlQuery> =
   }
 
   if (pageData) {
-    pageData.i = pageData.i ? restoreImageUrl(pageData.i) : pageData.i
+    if (query.i) {
+      const img = `${query.i}`
+      if (img.startsWith('http')) {
+        pageData.i = img
+      } else {
+        let buff = new Buffer(img, 'base64')
+        let text = buff.toString('ascii')
+        pageData.i = restoreImageUrl(text)
+      }
+    } else {
+      pageData.i = pageData.i ? restoreImageUrl(pageData.i) : pageData.i
+    }
+    pageData.t = query.t ? query.t : pageData.t
 
     return {
       props: {
