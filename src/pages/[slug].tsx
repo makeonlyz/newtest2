@@ -1,7 +1,7 @@
+import { restoreImageUrl } from '@/libs/urlUtils'
 import { IncomingHttpHeaders } from 'http'
 import { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import Head from 'next/head'
-import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { ParsedUrlQuery } from 'querystring'
 // import data from `../data/${process.env.NEXT_PUBLIC_JSON_FILE}`
@@ -35,11 +35,12 @@ const Page: React.FC<PageProps> = ({ pageData }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {pageData ? (
-        <div>
-          <h1>{pageData.t}</h1>
+        <div className="m-auto max-w-lg">
+          <h1 className="mb-4 mt-10 text-xl font-bold">{pageData.t}</h1>
           {pageData.i && (
             <p className="w-100 h-100">
-              <Image src={pageData.i} height={100} width={100} alt={pageData.t} />
+              {/* <Image src={pageData.i} height={100} width={100} alt={pageData.t} /> */}
+              <img src={pageData.i} alt={pageData.t} />
             </p>
           )}
         </div>
@@ -84,6 +85,8 @@ export const getServerSideProps: GetServerSideProps<PageProps, ParsedUrlQuery> =
   }
 
   if (pageData) {
+    pageData.i = pageData.i ? restoreImageUrl(pageData.i) : pageData.i
+
     return {
       props: {
         pageData
