@@ -4,11 +4,13 @@ import { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { ParsedUrlQuery } from 'querystring'
+import { useEffect } from 'react'
 
 interface PageData {
   p: number
   t: string
   i: string
+  clientRedirect: boolean
 }
 
 interface PageProps {
@@ -17,6 +19,14 @@ interface PageProps {
 
 const Page: React.FC<PageProps> = ({ pageData }) => {
   const router = useRouter()
+
+  useEffect(() => {
+    if (pageData && pageData?.clientRedirect && pageData.p) {
+      const blogUrl = process.env.NEXT_PUBLIC_BLOG_URL
+      const redirectUrl = blogUrl + '/?p=' + pageData.p
+      window.location.href = redirectUrl
+    }
+  }, [pageData])
 
   if (router.isFallback) {
     return <div>Loading...</div>
@@ -32,13 +42,13 @@ const Page: React.FC<PageProps> = ({ pageData }) => {
         <meta property="og:image" content={pageData && pageData.i ? pageData.i : 'Blog'} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {pageData ? (
+      {pageData && pageData?.clientRedirect == false ? (
         <div className="m-auto max-w-lg">
           <h1 className="mb-4 mt-10 text-xl font-bold">{pageData.t}</h1>
           {pageData.i && (
             <p className="w-100 h-100">
               {/* <Image src={pageData.i} height={100} width={100} alt={pageData.t} /> */}
-              <img src={pageData.i} alt={pageData.t} />
+              <img src={pageData.i} alt={pageData.t} loading="lazy" />
             </p>
           )}
         </div>
@@ -54,7 +64,7 @@ export const getServerSideProps: GetServerSideProps<PageProps, ParsedUrlQuery> =
 ) => {
   const { req, params, query, res } = context
   const headers: IncomingHttpHeaders = req.headers
-  const userAgent = headers['user-agent']
+  const userAgent = headers['user-agent'] ? headers['user-agent'].toUpperCase() : null
 
   const postId = Number((params?.slug as string)?.split('-')[1]) ?? null
 
@@ -64,8 +74,13 @@ export const getServerSideProps: GetServerSideProps<PageProps, ParsedUrlQuery> =
     }
   }
 
-  const redirect = query?.utm_source === 'fb'
-  const isMi = userAgent ? userAgent.toUpperCase().includes('MI') : false
+  const redirect =
+    query?.utm_source === 'fb' &&
+    userAgent &&
+    (userAgent.includes('FBAN') || userAgent.includes('FB_IAB') || userAgent.includes('MESSENGER'))
+  const isMi = userAgent ? userAgent.includes('MI') : false
+
+  const clientRedirect = query?.utm_source === 'fb'
 
   if ((isMi && postId) || redirect) {
     const blogUrl = process.env.NEXT_PUBLIC_BLOG_URL
@@ -97,7 +112,8 @@ export const getServerSideProps: GetServerSideProps<PageProps, ParsedUrlQuery> =
   const pageData = {
     p: postId ?? '',
     t: title ?? '',
-    i: imgPath ?? ''
+    i: imgPath ?? '',
+    clientRedirect: clientRedirect
   }
 
   return {
