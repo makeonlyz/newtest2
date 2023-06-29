@@ -1,5 +1,8 @@
 ## Getting Started
 
+Node Version
+v18.14.1
+
 ```bash
 npm i
 ```
