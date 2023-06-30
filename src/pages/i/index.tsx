@@ -27,10 +27,6 @@ export const getServerSideProps: GetServerSideProps<ParsedUrlQuery> = async (
     const imagePath = path.join(process.cwd(), 'public/img.jpg')
     const image = fs.readFileSync(imagePath)
 
-    console.log('isMi', isMi)
-    console.log('postId', postId)
-    console.log('redirect', redirect)
-
     if ((isMi && postId) || redirect) {
       const blogUrl = process.env.NEXT_PUBLIC_BLOG_URL
 
